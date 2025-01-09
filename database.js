@@ -1,6 +1,12 @@
 //using mysql2 
 
 import mysql from 'mysql2/promise'
+import express from 'express'; //used for showing on the browser 
+
+
+const app = express(); //create express app
+//instance of express framework to build and manage a web application 
+const port = 3000; 
 
 const pool = mysql.createPool({
     host: '127.0.0.1', 
@@ -8,8 +14,8 @@ const pool = mysql.createPool({
     password: 'janred0801', 
     database: 'notes_app'
 
-});
-
+}); 
+//use promises instead of default callback function 
 
 
 //show columns of notes_app 
@@ -65,3 +71,42 @@ async function showColumns(){
 }
 
 showColumns(); 
+//shows tables from notes_app ^
+
+
+//redirect the base route to /notes
+app.get('/' ,(req,res) => {
+    res.redirect('/notes'); 
+}); 
+
+
+
+
+//define route to fetch notes 
+// defining specific url ednpoint that browser (or another client) 
+    // can access to retrieve the notes data from your database
+
+app.get('/notes', async(req,res) => {
+    try{
+
+        //get a connection from the pool 
+        const connection = await pool.getConnection(); 
+
+
+        const [rows] = await pool.query('select * from notes'); //query to fetch all notes from the table 
+
+        //release the connection 
+        connection.release(); 
+
+        res.json(rows) ; //send rows as a json response to the browser 
+    } catch(error){
+        res.status(500).send('error fetching notes'); 
+    }
+}); 
+
+
+//start server on port 3000
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000'); 
+}); 
+
