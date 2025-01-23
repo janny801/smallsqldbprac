@@ -1,6 +1,11 @@
 //using mysql2 
 
 
+import dotenv from 'dotenv';
+dotenv.config();  // This loads the environment variables from the .env file
+
+const correctPassword = process.env.INSERT_PASSWORD;  // Get the password from environment variable
+
 
 import mysql from 'mysql2/promise';
 import express from 'express';
@@ -21,7 +26,7 @@ const port = 3000;
 const pool = mysql.createPool({
     host: '127.0.0.1', 
     user: 'root', 
-    password: 'janred0801', 
+    password: correctPassword,
     database: 'notes_app'
 
 }); 
@@ -119,7 +124,15 @@ app.get('/notes', async(req,res) => {
 
 
 app.post('/add-note', express.json(), async (req, res) => { //used to add notes from the browser
-    const { title, contents } = req.body;
+    const { title, contents, password } = req.body;
+
+    // Check if the password is correct
+    if (password !== correctPassword) {
+        return res.status(403).send('Unauthorized: Incorrect password');
+    }
+
+
+
     if (!title || !contents) {
         return res.status(400).send('Title and contents are required');
     }
