@@ -76,9 +76,11 @@ async function showColumns(){
     }
 }
 
-showColumns(); 
-//shows tables from notes_app ^
 
+/*
+showColumns(); //removed since we are showing when opening using localhost
+//shows tables from notes_app ^
+*/ 
 
 //serve index.html file
 app.get('/', (req, res) => {
@@ -111,7 +113,39 @@ app.get('/notes', async(req,res) => {
 }); 
 
 
+
+app.post('/add-note', express.json(), async (req, res) => { //used to add notes from the browser
+    const { title, contents } = req.body;
+    if (!title || !contents) {
+        return res.status(400).send('Title and contents are required');
+    }
+
+    try {
+        const connection = await pool.getConnection();
+        const query = 'INSERT INTO notes (title, contents, created) VALUES (?, ?, NOW())';
+        await connection.query(query, [title, contents]);
+        connection.release();
+
+        console.log(`\nNote added: Title: "${title}", Contents: "${contents}"`);
+        await showColumns(); // Call showColumns to log the updated database state
+
+
+        res.status(201).send('Note added successfully');
+    } catch (error) {
+        console.error('Error adding note:', error.message);
+        res.status(500).send('Error adding note');
+    }
+});
+
+
+
+
 //start server on port 3000
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000'); 
-}); 
+    (async () => {
+        console.log('Fetching initial database state:\n');
+        await showColumns(); // Call showColumns() asynchronously
+    })();
+});
+
