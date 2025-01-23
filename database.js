@@ -1,5 +1,7 @@
 //using mysql2 
 
+
+
 import mysql from 'mysql2/promise';
 import express from 'express';
 import path from 'path';
@@ -12,6 +14,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express(); //create express app
 //instance of express framework to build and manage a web application 
+app.use(express.static(__dirname));
+
 const port = 3000; 
 
 const pool = mysql.createPool({
