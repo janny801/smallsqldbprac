@@ -20,6 +20,7 @@ const __dirname = path.dirname(__filename);
 const app = express(); //create express app
 //instance of express framework to build and manage a web application 
 app.use(express.static(__dirname));
+app.use(express.json()); 
 
 const port = 3000; 
 

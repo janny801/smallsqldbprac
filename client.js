@@ -16,7 +16,13 @@ fetch('/notes')
         });
 
 
-        
+        //not currently working 
+        //try to move the Event Listener for the OK and Cancel Buttons Outside the click Event Listener for Delete Button:
+            //but this causes 'failed to load notes' -- not sure why
+
+
+
+
 
        // Event listeners for delete buttons
         const deleteButtons = document.querySelectorAll('.delete-btn');
@@ -58,6 +64,15 @@ fetch('/notes')
         });
 
 
+
+
+
+
+
+
+
+
+        
 
 /*
 
