@@ -158,14 +158,26 @@ app.post('/add-note', express.json(), async (req, res) => { //used to add notes 
 
 
 //for deletion 
-app.delete('/delete-note/:id', async (req, res) => {
+app.delete('/delete-note/:id', express.json(), async (req, res) => {
     const noteId = req.params.id;
+    const { password } = req.body; // Get the password from the request body
+
+    console.log('Received password:', password); // Log password for debugging
+
+    // Check if the password is correct
+    if (password !== correctPassword) {
+        return res.status(403).send('Unauthorized: Incorrect password');
+    }
 
     try {
         const connection = await pool.getConnection();
         const query = 'DELETE FROM notes WHERE id = ?';
-        await connection.query(query, [noteId]);
+        const result = await connection.query(query, [noteId]);
         connection.release();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Note not found');
+        }
 
         console.log(`Note with ID: ${noteId} deleted successfully`);
         res.status(200).send('Note deleted successfully');

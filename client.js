@@ -1,5 +1,3 @@
-
-
 // Fetch existing notes and display them
 fetch('/notes')
     .then(response => response.json())
@@ -16,15 +14,80 @@ fetch('/notes')
             `;
             notesList.appendChild(listItem);
         });
-        // Add event listeners for delete buttons
+
+
+        
+
+       // Event listeners for delete buttons
         const deleteButtons = document.querySelectorAll('.delete-btn');
-                deleteButtons.forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const noteId = event.target.getAttribute('data-id');
-                        console.log(`Delete note with ID: ${noteId}`);
-                        // You will implement the delete functionality here later
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const noteId = event.target.getAttribute('data-id');
+
+                // Show the modal for password input
+                document.getElementById('deleteModal').style.display = 'block';
+
+                // Add event listener for the OK button in the modal
+                document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
+                    const password = document.getElementById('deletePassword').value;
+
+                    const response = await fetch(`/delete-note/${noteId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ password }), // Send password for validation
                     });
+
+                    if (response.ok) {
+                        alert('Note deleted successfully!');
+                        event.target.closest('li').remove(); // Remove the note from the UI
+                    } else {
+                        alert('Failed to delete note. ' + await response.text()); // Show error message
+                    }
+
+                    // Close the modal after the operation
+                    document.getElementById('deleteModal').style.display = 'none';
                 });
+
+                // Add event listener for the Cancel button
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    document.getElementById('deleteModal').style.display = 'none'; // Close the modal
+                });
+            });
+        });
+
+
+
+/*
+
+use modal instead of prompt()
+        //event listeners for delete buttons
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const noteId = event.target.getAttribute('data-id');
+                const password = prompt("Enter password to delete the note:");
+
+                const response = await fetch(`/delete-note/${noteId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ password }), // Send password for validation
+                });
+
+                if (response.ok) {
+                    alert('Note deleted successfully!');
+                    event.target.closest('li').remove(); // Remove the note from the UI
+                } else {
+                    alert('Failed to delete note. ' + await response.text()); // Show error message
+                }
+            });
+        });
+
+*/ 
+
     })
     .catch(error => {
         console.error('Error fetching notes:', error);
