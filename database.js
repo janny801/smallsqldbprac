@@ -157,6 +157,27 @@ app.post('/add-note', express.json(), async (req, res) => { //used to add notes 
 
 
 
+//for deletion 
+app.delete('/delete-note/:id', async (req, res) => {
+    const noteId = req.params.id;
+
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM notes WHERE id = ?';
+        await connection.query(query, [noteId]);
+        connection.release();
+
+        console.log(`Note with ID: ${noteId} deleted successfully`);
+        res.status(200).send('Note deleted successfully');
+    } catch (error) {
+        console.error('Error deleting note:', error.message);
+        res.status(500).send('Error deleting note');
+    }
+});
+
+
+
+
 //start server on port 3000
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000'); 
