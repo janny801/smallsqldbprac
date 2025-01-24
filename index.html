@@ -46,9 +46,19 @@
                         <strong>Title:</strong> ${note.title} <br>
                         <strong>Contents:</strong> ${note.contents} <br>
                         <strong>Created:</strong> ${note.created}
+                        <button class="delete-btn" data-id="${note.id}">Delete</button>
                     `;
                     notesList.appendChild(listItem);
                 });
+                // Add event listeners for delete buttons
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+                        deleteButtons.forEach(button => {
+                            button.addEventListener('click', (event) => {
+                                const noteId = event.target.getAttribute('data-id');
+                                console.log(`Delete note with ID: ${noteId}`);
+                                // You will implement the delete functionality here later
+                            });
+                        });
             })
             .catch(error => {
                 console.error('Error fetching notes:', error);
