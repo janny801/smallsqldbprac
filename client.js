@@ -199,6 +199,8 @@ document.getElementById('cancelBtn').addEventListener('click', () => {
 
 
 
+//for edit func
+
 document.getElementById('saveEditBtn').addEventListener('click', async () => {
     const noteId = document.getElementById('editModal').getAttribute('data-note-id');
     const title = document.getElementById('editTitle').value;
@@ -224,4 +226,16 @@ document.getElementById('saveEditBtn').addEventListener('click', async () => {
         console.error('Fetch error:', error);
         alert('Error sending request.');
     }
+});
+
+
+// Cancel Edit Button Logic
+document.getElementById('cancelEditBtn').addEventListener('click', () => {
+    // Hide the edit modal
+    document.getElementById('editModal').style.display = 'none';
+
+    // Optionally clear the input fields (if desired)
+    document.getElementById('editTitle').value = '';
+    document.getElementById('editContents').value = '';
+    document.getElementById('editPassword').value = '';
 });
