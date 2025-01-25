@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             // Attach event listeners after the delete buttons have been added to the DOM
             attachDeleteEventListeners();
+            attachSortEventListener(data); // Attach the sorting functionality
         })
         .catch(error => {
             console.error('Error fetching notes:', error);
@@ -25,11 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-
-
-
-function attachDeleteEventListeners() { //not exactly sure wat this does 
-    // Event listeners for delete buttons
+function attachDeleteEventListeners() {
     document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', event => {
             const noteId = event.target.getAttribute('data-id');
@@ -39,6 +36,34 @@ function attachDeleteEventListeners() { //not exactly sure wat this does
     });
 }
 
+function attachSortEventListener(notesData) {
+    const sortDropdown = document.getElementById('sortDropdown');
+    sortDropdown.addEventListener('change', () => {
+        const sortedNotes = [...notesData].sort((a, b) => {
+            const dateA = new Date(a.created);
+            const dateB = new Date(b.created);
+            return sortDropdown.value === 'oldest' ? dateA - dateB : dateB - dateA;
+        });
+        displaySortedNotes(sortedNotes);
+    });
+}
+
+function displaySortedNotes(sortedNotes) {
+    const notesList = document.getElementById('notes-list');
+    notesList.innerHTML = ''; // Clear the existing list
+    sortedNotes.forEach(note => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <strong>ID:</strong> ${note.id} <br>
+            <strong>Title:</strong> ${note.title} <br>
+            <strong>Contents:</strong> ${note.contents} <br>
+            <strong>Created:</strong> ${note.created}
+            <button class="delete-btn" data-id="${note.id}">Delete</button>
+        `;
+        notesList.appendChild(listItem);
+    });
+    attachDeleteEventListeners(); // Reattach delete event listeners to new DOM elements
+}
 
         
 
