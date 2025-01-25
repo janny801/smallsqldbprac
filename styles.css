@@ -139,7 +139,7 @@ button:hover {
 }
 
 .modal-content {
-    background-color: black;
+    background-color: #222; /* Dark background similar to delete modal */
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -199,8 +199,7 @@ button:hover {
 
 
 
-
-/* for editing notes functionality*/ 
+/* for editing notes functionality*/
 /* Base styling for the edit modal background */
 #editModal {
     display: none; /* Hidden by default */
@@ -211,30 +210,34 @@ button:hover {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black with opacity for the background */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity for the background */
 }
 
 /* Modal Content specific to edit modal */
 #editModal .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 10% from the top and centered horizontally */
+    background-color: #222; /* Dark background similar to delete modal */
+    color: white; /* White text */
+    margin: 10% auto; /* Center modal vertically and horizontally */
     padding: 20px;
     border: 1px solid #888;
     width: 40%; /* Adjust based on your design preference */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Shadow for 3D effect */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Shadow for 3D effect */
 }
 
 /* Styling buttons inside the edit modal */
 #editModal .modal-buttons button {
-    background-color: #4CAF50; /* Green background for visibility */
+    background-color: #007BFF; /* Blue background similar to your screenshot */
     color: white; /* White text */
     padding: 12px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 100%; /* Full width for easier click */
+    font-size: 16px;
+    border-radius: 5px; /* Rounded corners for the button */
 }
 
+/* Button hover effect */
 #editModal .modal-buttons button:hover {
     opacity: 0.8; /* Slight fade on hover for feedback */
 }
@@ -248,4 +251,12 @@ button:hover {
     margin-bottom: 8px;
     border: 1px solid #ccc;
     box-sizing: border-box; /* Include padding and border in the element's width */
+    border-radius: 5px; /* Rounded corners for input fields */
+    background-color: #333; /* Dark background for inputs */
+    color: white; /* White text inside the input fields */
+}
+
+/* Styling the cancel button separately for distinction */
+#editModal .modal-buttons #cancelEditBtn {
+    background-color: #FF0000; /* Red background for cancel button */
 }
