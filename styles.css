@@ -138,7 +138,7 @@ button:hover {
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: black;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -148,6 +148,7 @@ button:hover {
 
 .close {
     color: #aaa;
+    border: 10px;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -171,4 +172,8 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+#cancelBtn {
+    margin-bottom: 10px; /* Adds space below the Cancel button */
 }
