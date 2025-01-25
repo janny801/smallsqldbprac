@@ -189,31 +189,56 @@ app.delete('/delete-note/:id', express.json(), async (req, res) => {
 
 
 
-//for edit functionality
-app.put('/update-note/:id', express.json(), async (req, res) => {
-    const noteId = req.params.id;
+// Update note endpoint
+app.put('/update-note/:id', async (req, res) => {
+    const { id } = req.params;
     const { title, contents, password } = req.body;
 
-    // Check if the password is correct
-    if (password !== correctPassword) {
+    // Check password
+    if (password !== process.env.INSERT_PASSWORD) {
         return res.status(403).send('Unauthorized: Incorrect password');
     }
 
     try {
         const connection = await pool.getConnection();
         const query = 'UPDATE notes SET title = ?, contents = ? WHERE id = ?';
-        const [result] = await connection.query(query, [title, contents, noteId]);
+        const [result] = await connection.query(query, [title, contents, id]);
         connection.release();
 
         if (result.affectedRows === 0) {
             return res.status(404).send('Note not found');
         }
 
-        console.log(`Note with ID: ${noteId} updated successfully`);
+        console.log(`Note with ID: ${id} updated successfully`);
         res.send('Note updated successfully');
     } catch (error) {
         console.error('Error updating note:', error.message);
         res.status(500).send('Error updating note');
+    }
+});
+
+
+// Fetch a single note by ID
+app.get('/notes/:id', async (req, res) => {
+    const noteId = req.params.id;
+    console.log(`Fetching note with ID: ${noteId}`); // Log the received note ID
+
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM notes WHERE id = ?';
+        const [rows] = await connection.query(query, [noteId]);
+        connection.release();
+
+        if (rows.length === 0) {
+            console.log(`Note with ID ${noteId} not found`); // Log if note is not found
+            return res.status(404).send('Note not found');
+        }
+
+        console.log(`Note fetched successfully:`, rows[0]); // Log the fetched note
+        res.json(rows[0]);
+    } catch (error) {
+        console.error('Error fetching note:', error.message);
+        res.status(500).send('Error fetching note');
     }
 });
 

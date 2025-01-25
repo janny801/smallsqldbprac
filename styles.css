@@ -128,6 +128,7 @@ button:hover {
 
 /* Modal styles */
 .modal { /* Hidden by default */
+    display:none; 
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -200,3 +201,51 @@ button:hover {
 
 
 /* for editing notes functionality*/ 
+/* Base styling for the edit modal background */
+#editModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top, higher than other content but adjust as necessary */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black with opacity for the background */
+}
+
+/* Modal Content specific to edit modal */
+#editModal .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% from the top and centered horizontally */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Adjust based on your design preference */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Shadow for 3D effect */
+}
+
+/* Styling buttons inside the edit modal */
+#editModal .modal-buttons button {
+    background-color: #4CAF50; /* Green background for visibility */
+    color: white; /* White text */
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%; /* Full width for easier click */
+}
+
+#editModal .modal-buttons button:hover {
+    opacity: 0.8; /* Slight fade on hover for feedback */
+}
+
+/* Input styling specific to edit modal */
+#editModal input[type="text"],
+#editModal textarea {
+    width: 100%; /* Full width of the modal content */
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Include padding and border in the element's width */
+}

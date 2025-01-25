@@ -40,6 +40,36 @@ function attachDeleteEventListeners() {
     });
 }
 
+
+
+
+function attachEditEventListeners() {
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', event => {
+            const noteId = event.target.getAttribute('data-id');
+
+            fetch(`/notes/${noteId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(note => {
+                    document.getElementById('editTitle').value = note.title;
+                    document.getElementById('editContents').value = note.contents;
+                    document.getElementById('editModal').setAttribute('data-note-id', noteId);
+                    document.getElementById('editModal').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error loading note for edit:', error);
+                });
+        });
+    });
+}
+
+
+
 function attachSortEventListener(notesData) {
     const sortDropdown = document.getElementById('sortDropdown');
     sortDropdown.addEventListener('change', () => {
@@ -68,24 +98,6 @@ function displaySortedNotes(sortedNotes) {
     });
     attachDeleteEventListeners(); // Reattach delete event listeners to new DOM elements
 }
-
-function attachEditEventListeners() {
-    document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', event => {
-            const noteId = event.target.getAttribute('data-id');
-            fetch(`/notes/${noteId}`)
-                .then(response => response.json())
-                .then(note => {
-                    document.getElementById('editTitle').value = note.title;
-                    document.getElementById('editContents').value = note.contents;
-                    document.getElementById('editModal').setAttribute('data-note-id', noteId);
-                    document.getElementById('editModal').style.display = 'block';
-                })
-                .catch(error => console.error('Error loading note for edit:', error));
-        });
-    });
-}
-
 
 
 /*
@@ -176,27 +188,29 @@ document.getElementById('cancelBtn').addEventListener('click', () => {
 
 
 
-
-
 document.getElementById('saveEditBtn').addEventListener('click', async () => {
     const noteId = document.getElementById('editModal').getAttribute('data-note-id');
     const title = document.getElementById('editTitle').value;
     const contents = document.getElementById('editContents').value;
     const password = document.getElementById('editPassword').value;
 
-    const response = await fetch(`/update-note/${noteId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, contents, password })
-    });
+    try {
+        const response = await fetch(`/update-note/${noteId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, contents, password })
+        });
 
-    if (response.ok) {
-        alert('Note updated successfully!');
-        document.getElementById('editModal').style.display = 'none';
-        window.location.reload(); // Reload to show updated note
-    } else {
-        alert('Failed to update note. ' + await response.text());
+        if (response.ok) {
+            alert('Note updated successfully!');
+            document.getElementById('editModal').style.display = 'none';
+            window.location.reload(); // Reload to show updated note
+        } else {
+            const errorMessage = await response.text();
+            alert(`Failed to update note. Error: ${errorMessage}`);
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        alert('Error sending request.');
     }
 });
