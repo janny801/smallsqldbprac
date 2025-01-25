@@ -177,3 +177,21 @@ button:hover {
 #cancelBtn {
     margin-bottom: 10px; /* Adds space below the Cancel button */
 }
+
+
+
+
+
+/* sort button functionality*/ 
+.sort-dropdown {
+    margin: 10px;
+    padding: 5px 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.sort-dropdown:hover {
+    border-color: #888; /* Darker border on hover */
+}
