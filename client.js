@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 notesList.appendChild(listItem);
             });
-            
+            console.log('Calling attachEditEventListeners...');
+
             // Attach event listeners after the delete buttons have been added to the DOM
             attachEditEventListeners(); // Attach edit listeners after notes are rendered
-
             attachDeleteEventListeners();
             attachSortEventListener(data); // Attach the sorting functionality
         })
@@ -44,18 +44,28 @@ function attachDeleteEventListeners() {
 
 
 function attachEditEventListeners() {
+    console.log('Attaching event listeners to .edit-btn buttons...'); //for test
+
+
     document.querySelectorAll('.edit-btn').forEach(button => {
+        console.log('Attaching event listener to button with data-id:', button.getAttribute('data-id')); //for test
+
         button.addEventListener('click', event => {
             const noteId = event.target.getAttribute('data-id');
+            console.log('Edit button clicked for note ID:', noteId);
+            console.log('Fetching note with ID:', noteId); //for testing
+
 
             fetch(`/notes/${noteId}`)
                 .then(response => {
+                    console.log('Raw response:', response); // Logs the raw response object
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    return response.json();
+                    return response.json(); // Parses the JSON body of the response
                 })
                 .then(note => {
+                    console.log('Fetched note for edit:', note); // Logs the parsed JSON object
                     document.getElementById('editTitle').value = note.title;
                     document.getElementById('editContents').value = note.contents;
                     document.getElementById('editModal').setAttribute('data-note-id', noteId);
@@ -64,8 +74,9 @@ function attachEditEventListeners() {
                 .catch(error => {
                     console.error('Error loading note for edit:', error);
                 });
-        });
-    });
+
+                    });
+                });
 }
 
 
