@@ -189,6 +189,37 @@ app.delete('/delete-note/:id', express.json(), async (req, res) => {
 
 
 
+//for edit functionality
+app.put('/update-note/:id', express.json(), async (req, res) => {
+    const noteId = req.params.id;
+    const { title, contents, password } = req.body;
+
+    // Check if the password is correct
+    if (password !== correctPassword) {
+        return res.status(403).send('Unauthorized: Incorrect password');
+    }
+
+    try {
+        const connection = await pool.getConnection();
+        const query = 'UPDATE notes SET title = ?, contents = ? WHERE id = ?';
+        const [result] = await connection.query(query, [title, contents, noteId]);
+        connection.release();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Note not found');
+        }
+
+        console.log(`Note with ID: ${noteId} updated successfully`);
+        res.send('Note updated successfully');
+    } catch (error) {
+        console.error('Error updating note:', error.message);
+        res.status(500).send('Error updating note');
+    }
+});
+
+
+
+
 
 //start server on port 3000
 app.listen(3000, () => {

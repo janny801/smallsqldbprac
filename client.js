@@ -11,11 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <strong>Title:</strong> ${note.title} <br>
                     <strong>Contents:</strong> ${note.contents} <br>
                     <strong>Created:</strong> ${note.created}
+                    <button class="edit-btn" data-id="${note.id}">Edit</button> 
                     <button class="delete-btn" data-id="${note.id}">Delete</button>
                 `;
                 notesList.appendChild(listItem);
             });
+            
             // Attach event listeners after the delete buttons have been added to the DOM
+            attachEditEventListeners(); // Attach edit listeners after notes are rendered
+
             attachDeleteEventListeners();
             attachSortEventListener(data); // Attach the sorting functionality
         })
@@ -65,7 +69,24 @@ function displaySortedNotes(sortedNotes) {
     attachDeleteEventListeners(); // Reattach delete event listeners to new DOM elements
 }
 
-        
+function attachEditEventListeners() {
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', event => {
+            const noteId = event.target.getAttribute('data-id');
+            fetch(`/notes/${noteId}`)
+                .then(response => response.json())
+                .then(note => {
+                    document.getElementById('editTitle').value = note.title;
+                    document.getElementById('editContents').value = note.contents;
+                    document.getElementById('editModal').setAttribute('data-note-id', noteId);
+                    document.getElementById('editModal').style.display = 'block';
+                })
+                .catch(error => console.error('Error loading note for edit:', error));
+        });
+    });
+}
+
+
 
 /*
 
@@ -123,7 +144,7 @@ document.getElementById('noteForm').addEventListener('submit', async (event) => 
 
 
 
-// Event listener for the OK button in the modal
+// Event listener for the OK button in the modal (for the deletion function)
 document.getElementById('confirmBtn').addEventListener('click', async () => {
     const noteId = document.getElementById('deleteModal').getAttribute('data-note-id');
     const password = document.getElementById('deletePassword').value;
@@ -150,4 +171,32 @@ document.getElementById('confirmBtn').addEventListener('click', async () => {
 // Event listener for the Cancel button
 document.getElementById('cancelBtn').addEventListener('click', () => {
     document.getElementById('deleteModal').style.display = 'none'; // Close the modal
+});
+
+
+
+
+
+
+document.getElementById('saveEditBtn').addEventListener('click', async () => {
+    const noteId = document.getElementById('editModal').getAttribute('data-note-id');
+    const title = document.getElementById('editTitle').value;
+    const contents = document.getElementById('editContents').value;
+    const password = document.getElementById('editPassword').value;
+
+    const response = await fetch(`/update-note/${noteId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, contents, password })
+    });
+
+    if (response.ok) {
+        alert('Note updated successfully!');
+        document.getElementById('editModal').style.display = 'none';
+        window.location.reload(); // Reload to show updated note
+    } else {
+        alert('Failed to update note. ' + await response.text());
+    }
 });
