@@ -8,11 +8,9 @@
 </head>
 <body>
 
-    
     <div class="container">
         <h1>Notes App</h1>
-        
-        
+
         <!-- Notes List Section -->
         <section id="notes-section">
             <h2>Your Notes</h2>
@@ -22,37 +20,31 @@
             </select>
             <ul id="notes-list"></ul>
         </section>
-        
+
         <!-- Add Note Form Section -->
         <section id="form-section">
             <h2>Add a New Note</h2>
             <form id="noteForm">
                 <input type="text" id="title" placeholder="Title" required />
                 <textarea id="contents" placeholder="Contents" required></textarea>
-                <input type="password" id="password" placeholder="Enter Password" required /> <!-- Password input -->
+                <input type="password" id="password" placeholder="Enter Password" required />
                 <button type="submit">Add Note</button>
             </form>
         </section>
 
-
-
-   
-       <!-- Modal for password input -->
-<div id="deleteModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <h2>Enter Password to Delete Note</h2>
-        <input type="password" id="deletePassword" placeholder="Password" required />
-        <div class="modal-buttons">
-            <button id="cancelBtn">Cancel</button>
-            <button id="confirmBtn">OK</button>
+        <!-- Modal for Password Input (Delete Modal) -->
+        <div id="deleteModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2>Enter Password to Delete Note</h2>
+                <input type="password" id="deletePassword" placeholder="Password" required />
+                <div class="modal-buttons">
+                    <button id="cancelBtn">Cancel</button>
+                    <button id="confirmBtn">OK</button>
+                </div>
+            </div>
         </div>
-    </div>
 
-
-
-
-       <!-- Modal for editing notes -->
-
+        <!-- Modal for Editing Notes (Edit Modal) -->
         <div id="editModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <h2>Edit Note</h2>
@@ -66,17 +58,12 @@
             </div>
         </div>
 
-
-
-
-</div>
-
-
-
     </div>
 
-    <script src="client.js"></script> <!-- link to client.js -->
-
+    <script src="client.js"></script>
 
 </body>
 </html>
+
+
+
