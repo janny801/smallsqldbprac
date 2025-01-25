@@ -1,75 +1,43 @@
-// Fetch existing notes and display them
-fetch('/notes')
-    .then(response => response.json())
-    .then(data => {
-        const notesList = document.getElementById('notes-list');
-        data.forEach(note => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                <strong>ID:</strong> ${note.id} <br>
-                <strong>Title:</strong> ${note.title} <br>
-                <strong>Contents:</strong> ${note.contents} <br>
-                <strong>Created:</strong> ${note.created}
-                <button class="delete-btn" data-id="${note.id}">Delete</button>
-            `;
-            notesList.appendChild(listItem);
-        });
-
-
-        //not currently working 
-        //try to move the Event Listener for the OK and Cancel Buttons Outside the click Event Listener for Delete Button:
-            //but this causes 'failed to load notes' -- not sure why
-
-
-
-
-
-       // Event listeners for delete buttons
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const noteId = event.target.getAttribute('data-id');
-
-                // Show the modal for password input
-                document.getElementById('deleteModal').style.display = 'block';
-
-                // Add event listener for the OK button in the modal
-                document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
-                    const password = document.getElementById('deletePassword').value;
-
-                    const response = await fetch(`/delete-note/${noteId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ password }), // Send password for validation
-                    });
-
-                    if (response.ok) {
-                        alert('Note deleted successfully!');
-                        event.target.closest('li').remove(); // Remove the note from the UI
-                    } else {
-                        alert('Failed to delete note. ' + await response.text()); // Show error message
-                    }
-
-                    // Close the modal after the operation
-                    document.getElementById('deleteModal').style.display = 'none';
-                });
-
-                // Add event listener for the Cancel button
-                document.getElementById('cancelBtn').addEventListener('click', () => {
-                    document.getElementById('deleteModal').style.display = 'none'; // Close the modal
-                });
+document.addEventListener('DOMContentLoaded', () => {
+    // Fetch existing notes and display them
+    fetch('/notes')
+        .then(response => response.json())
+        .then(data => {
+            const notesList = document.getElementById('notes-list');
+            data.forEach(note => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <strong>ID:</strong> ${note.id} <br>
+                    <strong>Title:</strong> ${note.title} <br>
+                    <strong>Contents:</strong> ${note.contents} <br>
+                    <strong>Created:</strong> ${note.created}
+                    <button class="delete-btn" data-id="${note.id}">Delete</button>
+                `;
+                notesList.appendChild(listItem);
             });
+            // Attach event listeners after the delete buttons have been added to the DOM
+            attachDeleteEventListeners();
+        })
+        .catch(error => {
+            console.error('Error fetching notes:', error);
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = '<li style="color: red;">Failed to load notes.</li>';
         });
+});
 
 
 
 
-
-
-
-
+function attachDeleteEventListeners() { //not exactly sure wat this does 
+    // Event listeners for delete buttons
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', event => {
+            const noteId = event.target.getAttribute('data-id');
+            document.getElementById('deleteModal').style.display = 'block';
+            document.getElementById('deleteModal').setAttribute('data-note-id', noteId);
+        });
+    });
+}
 
 
         
@@ -103,12 +71,6 @@ use modal instead of prompt()
 
 */ 
 
-    })
-    .catch(error => {
-        console.error('Error fetching notes:', error);
-        const notesList = document.getElementById('notes-list');
-        notesList.innerHTML = '<li style="color: red;">Failed to load notes.</li>';
-    });
 
 // Add a new note
 document.getElementById('noteForm').addEventListener('submit', async (event) => {
@@ -134,3 +96,33 @@ document.getElementById('noteForm').addEventListener('submit', async (event) => 
     }
 });
 
+
+
+// Event listener for the OK button in the modal
+document.getElementById('confirmBtn').addEventListener('click', async () => {
+    const noteId = document.getElementById('deleteModal').getAttribute('data-note-id');
+    const password = document.getElementById('deletePassword').value;
+
+    const response = await fetch(`/delete-note/${noteId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }), // Send password for validation
+    });
+
+    if (response.ok) {
+        alert('Note deleted successfully!');
+        document.querySelector(`[data-id="${noteId}"]`).closest('li').remove(); // Remove the note from the UI
+    } else {
+        alert('Failed to delete note. ' + await response.text()); // Show error message
+    }
+
+    // Close the modal after the operation
+    document.getElementById('deleteModal').style.display = 'none';
+});
+
+// Event listener for the Cancel button
+document.getElementById('cancelBtn').addEventListener('click', () => {
+    document.getElementById('deleteModal').style.display = 'none'; // Close the modal
+});

@@ -163,10 +163,9 @@ app.delete('/delete-note/:id', express.json(), async (req, res) => {
     const noteId = req.params.id;
     const { password } = req.body; // Get the password from the request body
 
-    console.log('Received password:', password); // Log password for debugging
-
     // Check if the password is correct
     if (password !== correctPassword) {
+        console.log("incorrect password"); 
         return res.status(403).send('Unauthorized: Incorrect password');
     }
 
