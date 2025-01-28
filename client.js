@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Attach event listeners after the notes are rendered
             attachEditEventListeners();
             attachDeleteEventListeners();
+            attachSortEventListener(data); // Attach the sort event listener with fetched data
+
             
         })
         .catch(error => {
