@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Attach event listeners after the notes are rendered
             attachEditEventListeners();
             attachDeleteEventListeners();
+            
         })
         .catch(error => {
             console.error('Error fetching notes:', error);
@@ -86,6 +87,13 @@ function displaySortedNotes(sortedNotes) {
     });
     attachDeleteEventListeners();
 }
+
+
+
+
+
+
+
 
 // Add a new note
 document.getElementById('noteForm').addEventListener('submit', async (event) => {

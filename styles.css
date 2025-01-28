@@ -183,21 +183,25 @@ button:hover {
 
 
 
-/* sort button functionality*/ 
+/* This CSS centers the dropdown and applies blue styling similar to the Edit button */
 .sort-dropdown {
-    margin: 10px;
-    padding: 5px 10px;
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.sort-dropdown:hover {
-    border-color: #888; /* Darker border on hover */
-}
-
-
+    display: block; /* Makes the dropdown a block element to center it */
+    margin: 0 auto; /* Auto margins center the block horizontally */
+    width: 50%; /* Adjust width as needed */
+    padding: 8px 12px; /* Padding similar to the Edit button */
+    font-size: 16px; /* Adjust font size as needed */
+    color: white; /* Text color */
+    background-color: #007BFF; /* Blue background color similar to the Edit button */
+    border: none; /* Removes border */
+    border-radius: 4px; /* Rounded corners like the Edit button */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  /* Additional styles for when the dropdown is focused or hovered */
+  .sort-dropdown:focus, .sort-dropdown:hover {
+    background-color: #0056b3; /* Slightly darker blue on hover/focus */
+    outline: none; /* Removes outline on focus */
+  }
 
 /* for editing notes functionality*/
 /* Base styling for the edit modal background */
