@@ -47,4 +47,4 @@ This application provides a simple web-based note-taking interface where users c
 ## Usage
 - To start the server, run:
   ```bash
-  npm start
+  nodemon database.js
