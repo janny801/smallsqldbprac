@@ -31,6 +31,11 @@ This application provides a simple web-based note-taking interface where users c
      ```bash
      npm install
      ```
+   - Additionally, install `nodemon` as a development dependency:
+     ```bash
+     npm install --save-dev nodemon
+     ```
+
 4. **Ensure your MySQL database is set up and running.**
 
 5. **Create a `.env` file in the project root with the following content (update the value accordingly):**
@@ -38,6 +43,7 @@ This application provides a simple web-based note-taking interface where users c
      ```bash
      INSERT_PASSWORD="your_password_here"
      ```
+
 6. **Run the schema setup script to create your database and tables:**
    - Execute the SQL schema script:
      ```bash
