@@ -36,7 +36,7 @@ This application provides a simple web-based note-taking interface where users c
 5. **Create a `.env` file in the project root with the following content (update the value accordingly):**
    - Set the environment variables:
      ```bash
-     INSERT_PASSWORD=your_password_here
+     INSERT_PASSWORD="your_password_here"
      ```
 6. **Run the schema setup script to create your database and tables:**
    - Execute the SQL schema script:
