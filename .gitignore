@@ -2,3 +2,6 @@
 # Environment config
 
 .env
+
+
+node_modules
